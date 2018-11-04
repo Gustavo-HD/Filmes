@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import filmesdb.usjt.br.filmesdb.R;
 import filmesdb.usjt.br.filmesdb.model.Filme;
 import filmesdb.usjt.br.filmesdb.model.FilmeDAO;
+import filmesdb.usjt.br.filmesdb.model.FilmeDb;
 import filmesdb.usjt.br.filmesdb.model.Genero;
 import filmesdb.usjt.br.filmesdb.model.GeneroDAO;
 import filmesdb.usjt.br.filmesdb.model.Util;
@@ -94,9 +95,11 @@ public class MainActivity extends Activity {
             Toast toast = Toast.makeText(this, "Conexão com a internet não encontrada. Utilizando cache.", Toast.LENGTH_LONG);
             toast.show();
             //Função para buscar do cache
+            new CarregaFilmes().execute("filmes");
         }
     }
 
+    //Busca os filmes no endpoint da TheMovieDB, com base na categoria selecionada.
     private class DownloadFilmes extends AsyncTask<String, Void, ArrayList<Filme>> {
 
         @Override
@@ -104,6 +107,8 @@ public class MainActivity extends Activity {
             try {
                 ArrayList<Filme> filmes = FilmeDAO.getFilmes(strings[0]);
                 //Adicionar função de carregar cache(sqlite)
+                FilmeDb db = new FilmeDb(context);
+                db.insereFilmes(filmes);
                 return filmes;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -113,6 +118,23 @@ public class MainActivity extends Activity {
 
         protected void onPostExecute(ArrayList<Filme> filmes) {
             intent.putExtra(GENERO, spinnerValue);
+            intent.putExtra(FILMES, filmes);
+            startActivity(intent);
+        }
+    }
+
+    //Função responsável por carregar a lista de filmes do SQlite,
+    //caso não haja conexão com a internet
+    private class CarregaFilmes extends AsyncTask<String, Void, ArrayList<Filme>> {
+
+        @Override
+        protected ArrayList<Filme> doInBackground(String... strings) {
+            FilmeDb db = new FilmeDb(context);
+            ArrayList<Filme> filmes = db.listarFilmes();
+            return filmes;
+        }
+
+        protected void onPostExecute(ArrayList<Filme> filmes){
             intent.putExtra(FILMES, filmes);
             startActivity(intent);
         }

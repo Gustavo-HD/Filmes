@@ -46,8 +46,13 @@ public class Util {
     }
 
     public static String retiraEspacosGenero(String genero){
-        genero = genero.toLowerCase().replace(' ', '_');
-        return removeCaracterEspecial(genero.replace('.', '_'));
+        if(genero != null) '{
+            genero = genero.toLowerCase().replace(' ', '_');
+            return removeCaracterEspecial(genero.replace('.', '_'));
+        }
+        else {
+            return genero;
+        }
     }
 
     public static String removeCaracterEspecial(String genero){

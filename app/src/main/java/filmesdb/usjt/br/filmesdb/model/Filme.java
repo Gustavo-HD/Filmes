@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class Filme implements Serializable {
     private int id;
-    private String titulo, genero, sinopse, diretor, dataLancamento;
+    private String titulo, genero, sinopse, diretor, dataLancamento, poster;
     private double popularidade;
 
     public Filme() {}
 
-    public Filme(int id, String titulo, String genero, String sinopse, String diretor, String dataLancamento, double popularidade) {
+    public Filme(int id, String titulo, String genero, String sinopse, String diretor, String dataLancamento, double popularidade, String poster) {
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
@@ -17,6 +17,7 @@ public class Filme implements Serializable {
         this.diretor = diretor;
         this.dataLancamento = dataLancamento;
         this.popularidade = popularidade;
+        this.poster = poster;
     }
 
     public int getId() {
@@ -75,6 +76,14 @@ public class Filme implements Serializable {
         this.popularidade = popularidade;
     }
 
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
     @Override
     public String toString() {
         return "Filme{" +
@@ -84,6 +93,7 @@ public class Filme implements Serializable {
                 ", sinopse='" + sinopse + '\'' +
                 ", diretor='" + diretor + '\'' +
                 ", dataLancamento='" + dataLancamento + '\'' +
+                ", poster='" + poster + '\'' +
                 ", popularidade=" + popularidade +
                 '}';
     }

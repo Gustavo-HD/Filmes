@@ -25,24 +25,22 @@ public class ListaFilmesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_filmes);
 
-        //Gerenciamento da activity atual
+
         activity = this;
 
         Intent intent = getIntent();
 
         String generoSelecionado = intent.getStringExtra(MainActivity.GENERO);
 
-        //Busca filmes conforme o gênero selecionado no spinner na tela anterior
-        //filmes = buscaFilmes(generoSelecionado);
-        filmes = (ArrayList<Filme>) intent.getSerializableExtra(MainActivity.FILMES);
-        //filmes = listaAlfabeticaFilmes(filmes);
 
-        //ListView personalizada com o adapter
+        filmes = (ArrayList<Filme>) intent.getSerializableExtra(MainActivity.FILMES);
+
+
         ListView listView = (ListView) findViewById(R.id.lista_filmes);
         FilmeAdapter adapter = new FilmeAdapter(filmes, this);
         listView.setAdapter(adapter);
 
-        //Observador do evento de clique na lista da tela
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
@@ -55,6 +53,7 @@ public class ListaFilmesActivity extends Activity {
         });
 
     }
+
 
     private ArrayList<Filme> listaAlfabeticaFilmes(ArrayList<Filme> filmes) {
 

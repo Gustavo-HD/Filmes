@@ -1,10 +1,14 @@
 package filmesdb.usjt.br.filmesdb.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
@@ -36,13 +40,15 @@ public class FilmeDAO {
                 filme.setId(item.getInt("id"));
                 filme.setDataLancamento(item.getString("release_date"));
                 filme.setTitulo(item.getString("title"));
+                filme.setSinopse(item.getString("overview"));
                 filme.setDiretor("Não informado");
+                filme.setPopularidade(item.getDouble("vote_average"));
+                filme.setPoster(item.getString("poster_path"));
 
                 //Array de Generos do filme
-                //JSONArray listaGenerosFilme = item.getJSONArray("genre_ids");
-                //JSONArray generos = listaGenerosFilme.getJSONArray(0);
-                //Genero generoFilme = GeneroDAO.buscaGenero(Integer.parseInt(generos.get(0)));
-                filme.setGenero("GeneroTeste");
+                JSONArray listaGenerosFilme = item.getJSONArray("genre_ids");
+                Genero generoFilme = GeneroDAO.buscaGenero(listaGenerosFilme.getInt(0));
+                filme.setGenero(generoFilme.getNome());
 
                 filmes.add(filme);
             }
@@ -52,6 +58,24 @@ public class FilmeDAO {
         }
 
         return filmes;
+    }
+
+    public static Bitmap getImagem(String url) throws IOException {
+        Bitmap imagem = null;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        InputStream iStream = response.body().byteStream();
+
+        imagem = BitmapFactory.decodeStream(iStream);
+
+        iStream.close();
+
+        return imagem;
     }
 
 }
